@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "panopticon": {
+      "type": "stdio",
+      "command": "panopticon",
+      "args": ["mcp"]
+    }
+  }
+}
