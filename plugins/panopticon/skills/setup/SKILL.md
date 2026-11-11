@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Check that this machine and repo can report to Panopticon — the panopticon CLI is installed, the machine is logged in, the repo has an origin remote and an openspec/changes folder, the report_progress tool is connected, and there's no duplicate panopticon server in the repo's .mcp.json — then fix what's missing or hand the user the command to run. Use when the user runs /panopticon:setup, says "set up panopticon", "is panopticon working?", or when report_progress is missing or failing for an unclear reason.
+description: Check that this machine and repo can report to Panopticon — the panopticon CLI is installed, the machine is logged in, the repo has an origin remote and an openspec/changes folder, the report_progress tool is connected, there's no duplicate panopticon server in the repo's .mcp.json, the session hooks can run, and the user knows whether they're away — then fix what's missing or hand the user the command to run. Use when the user runs /panopticon:setup, says "set up panopticon", "is panopticon working?", or when report_progress is missing or failing for an unclear reason.
 ---
 
 # Set up Panopticon reporting
@@ -18,7 +18,7 @@ command -v panopticon && panopticon --help
 ```
 
 - Missing: the CLI isn't on `PATH`. Until releases are published, it's built from the Panopticon repo
-  (`emmz-makes-stuff/apanopticon`) with `make install`, which copies it to `~/.local/bin/panopticon`. If
+  (`emmz-makes-stuff/panopticon`) with `make install`, which copies it to `~/.local/bin/panopticon`. If
   `~/.local/bin/panopticon` exists but isn't found, `~/.local/bin` isn't on `PATH`. Offer to help, but ask
   before running anything in another repo.
 - Present: `--help` prints the saved login's path on its last line (`Saved login: …`). Keep it for step 2.
@@ -62,11 +62,31 @@ from it is in your tool list.
 Don't call `report_progress` to test the connection unless the user agrees: a report shows up on the dashboard.
 If they agree, report the change they name, and show the reply.
 
-## 5. The hook
+## 5. The hooks
 
-This plugin's hook reminds the agent to report after each edit to a change's `tasks.md`. It uses `jq` when
-present, and falls back to `sed` without it. If `command -v jq` finds nothing, mention it (⚠️), but it isn't a
-failure.
+- **The `tasks.md` hook** reminds the agent to report after each edit to a change's `tasks.md`. It uses `jq` when
+  present, and falls back to `sed` without it. If `command -v jq` finds nothing, mention it (⚠️), but it isn't a
+  failure.
+- **The session hooks** show what this session is doing on the dashboard, and hold prompts while the user is away.
+  They need Claude Code 2.1.322 or later: check with `claude --version`, and say so (❌) if it's older. They run
+  `panopticon hook`, so they need step 1's CLI; without it they do nothing, silently.
+- If the user says the dashboard doesn't show their sessions, look at `hook.log` in the same folder as the saved
+  login (step 1's path). It lists `panopticon hook`'s failures, without tokens. Show its last few lines.
+
+## 6. Away mode
+
+```sh
+panopticon away
+```
+
+It prints whether the user is away (✅ either way, it's information). Explain in one or two lines:
+
+- **Away:** questions and permission prompts from their sessions wait for an answer on the dashboard, and the
+  terminal asks nothing. `panopticon away off`, or the Away switch in the dashboard's header, gives them back.
+- **Not away:** prompts are answered in the terminal as usual. Turn it on with `panopticon away on` before stepping
+  away; a prompt already waiting in the terminal isn't taken over.
+
+Don't change the switch yourself unless the user asks.
 
 ## Finish
 

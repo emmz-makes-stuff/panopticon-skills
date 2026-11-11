@@ -18,6 +18,10 @@ copy, and the server recomputes the card from `tasks.md`.
 You only name the change. The bridge works out the repo (from `origin`), the documents, the agent and the
 machine itself.
 
+The plugin's session hooks already tell the dashboard what you're doing from moment to moment, and when you're
+waiting on a question. That costs you nothing, and it doesn't replace reporting: only `report_progress` updates
+the change's tasks and documents.
+
 The reply states progress, e.g. `Overall 7/20 · section 2 Core 2/5`. Check it against what you think you've
 ticked: a mismatch usually means `tasks.md` wasn't saved, or a task line isn't a `- [x]` checkbox.
 
