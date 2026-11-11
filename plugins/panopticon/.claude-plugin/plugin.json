@@ -1,6 +1,6 @@
 {
   "name": "panopticon",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Report OpenSpec progress to Panopticon: registers the `panopticon mcp` bridge, nudges the agent to call report_progress whenever a change's tasks.md is edited, and adds a reporting skill plus a /panopticon:setup check of the CLI, login and repo.",
   "author": {
     "name": "emmz",
