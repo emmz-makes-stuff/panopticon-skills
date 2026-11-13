@@ -2,7 +2,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "^(?!AskUserQuestion$)",
+        "matcher": "^(?!AskUserQuestion$|mcp__.*panopticon.*__request_visit$)",
         "hooks": [
           {
             "type": "command",
@@ -21,11 +21,21 @@
             "timeout": 30000
           }
         ]
+      },
+      {
+        "matcher": "^mcp__.*panopticon.*__request_visit$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/panopticon-hook.sh\"",
+            "timeout": 30000
+          }
+        ]
       }
     ],
     "PermissionRequest": [
       {
-        "matcher": "^(?!AskUserQuestion$)",
+        "matcher": "^(?!AskUserQuestion$|mcp__.*panopticon.*__request_visit$)",
         "hooks": [
           {
             "type": "command",
