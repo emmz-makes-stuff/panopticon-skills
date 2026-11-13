@@ -1,14 +1,15 @@
 ---
 name: report-progress
-description: Keep the Panopticon dashboard current while building an OpenSpec change — call the panopticon report_progress tool when starting or resuming a change, after ticking tasks in tasks.md, and when a section lands, then read its reply. Use whenever you work through an OpenSpec change (/opsx:apply or any section-by-section build loop) in a repo with the panopticon MCP server, when a hook says tasks.md changed, or when the user says "report progress", "update the dashboard" or "tell Panopticon".
+description: Keep the Panopticon dashboard current while building an OpenSpec change — call the panopticon report_progress tool when starting or resuming a change, after ticking tasks in tasks.md, and when a section lands, then read its reply. Use whenever you work through an OpenSpec change (/opsx:apply or any section-by-section build loop) in a repo with the panopticon MCP server, when a hook says tasks.md changed, or when the user says "report progress", "update the dashboard" or "tell Panopticon". Also use it whenever you need the user to look at or act on a web page (review a pull request, approve a run, check how a page looks): call request_visit and wait for its answer.
 ---
 
 # Report progress to Panopticon
 
 Panopticon is a live dashboard of agents working through OpenSpec changes. The `panopticon` MCP server
-(registered by this plugin, running `panopticon mcp` locally) offers one tool, `report_progress`. Each call
-sends the change's whole folder (`proposal.md`, `design.md`, `tasks.md`, specs, devlog) from the working
-copy, and the server recomputes the card from `tasks.md`.
+(registered by this plugin, running `panopticon mcp` locally) offers `report_progress`, `list_projects`,
+`tag_change` and `request_visit`. This skill is mostly about `report_progress`. Each call sends the change's whole
+folder (`proposal.md`, `design.md`, `tasks.md`, specs, devlog) from the working copy, and the server recomputes the
+card from `tasks.md`. For `request_visit`, see [Visit requests](#visit-requests).
 
 ## The tool
 
@@ -58,3 +59,16 @@ The error text says what's wrong. The usual ones:
 
 If the `report_progress` tool isn't available at all, or the cause isn't clear, suggest `/panopticon:setup`.
 Never try to log in, or to read or print the saved token, yourself.
+
+## Visit requests
+
+When you need the user to look at or act on a web page, such as reviewing a pull request, approving a pipeline run
+or checking how a page looks, call `request_visit` instead of only writing the link in your reply.
+
+- `url` (required): an absolute `http` or `https` URL, with no user name or password in it.
+- `reason` (required): why, in a sentence, e.g. "Review the PR for the tags change".
+- `action` (optional): what to do there, e.g. "Approve it if the checks are green".
+
+If the user is away, the call waits until they answer on the dashboard, and returns Done or Can't, their note, and
+who answered. Wait for that answer before you rely on the visit. Otherwise it returns at once and says to ask in the
+terminal: do that, with the URL in your question.
