@@ -2,7 +2,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "^(?!AskUserQuestion$|mcp__.*panopticon.*__request_visit$)",
+        "matcher": "^(?!AskUserQuestion$|mcp__(plugin_panopticon_)?panopticon__request_visit$)",
         "hooks": [
           {
             "type": "command",
@@ -23,7 +23,7 @@
         ]
       },
       {
-        "matcher": "^mcp__.*panopticon.*__request_visit$",
+        "matcher": "^mcp__(plugin_panopticon_)?panopticon__request_visit$",
         "hooks": [
           {
             "type": "command",
@@ -35,7 +35,7 @@
     ],
     "PermissionRequest": [
       {
-        "matcher": "^(?!AskUserQuestion$|mcp__.*panopticon.*__request_visit$)",
+        "matcher": "^(?!AskUserQuestion$|mcp__(plugin_panopticon_)?panopticon__request_visit$)",
         "hooks": [
           {
             "type": "command",
